@@ -4,9 +4,9 @@ from django.db import models
 
 
 class User(models.Model):
-    firstName = models.CharField(
+    first_name = models.CharField(
         "First name", max_length=255, blank=True, null=True)
-    lastName = models.CharField(
+    last_name = models.CharField(
         "Last name", max_length=255, blank=True, null=True)
 
     username = models.CharField(
