@@ -26,6 +26,8 @@ class User(models.Model):
 		)
 	])
 
+	token = models.CharField(max_length=225, blank=True, null=False)
+
 	email_verified = models.BooleanField(default=False)
 
 	password = models.CharField(max_length=128, blank=True, null=False, validators=[
