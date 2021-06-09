@@ -6,5 +6,6 @@ from authentication import views
 
 
 urlpatterns = [
-    url(r'^api/users$', views.users_list)
+    url(r'^api/users$', views.users_list),
+    url(r'^api/verify_token', views.verify_token)
 ]
