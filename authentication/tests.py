@@ -1,4 +1,5 @@
 import json
+from django.http import response
 from django.test import TestCase
 from rest_framework import status
 
@@ -12,22 +13,53 @@ from authentication.serializers import UserSerializer
 
 class AuthenticationViewSetTestCase(TestCase):
 
-    def setUp(self):
-        User.objects.create(
-            first_name='Abdelrahman',
-            last_name='Ahmed',
-            username='abdu',
-            email='abdelrahman.farag84@gmail.com',
-            phone='01069225161'
-        )
+	def setUp(self):
+		User.objects.create(
+			first_name='Abdelrahman',
+			last_name='Ahmed',
+			username='abdu',
+			email='abdelrahman.farag84@gmail.com',
+			phone='01069225161'
+		)
 
-    # Test users index
-    def test_all_users(self):
-        response = self.client.get('/api/users', format="json")
+	# Test users index
+	def test_all_users(self):
+		response = self.client.get('/api/users', format="json")
 
-        users = User.objects.all()
-        users_serializer = UserSerializer(users, many=True)
+		users = User.objects.all()
+		users_serializer = UserSerializer(users, many=True)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.content.decode('utf-8'),
-                         json.dumps(users_serializer.data))
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(response.content.decode('utf-8'),
+			json.dumps(users_serializer.data))
+
+	# Test creating user
+	def test_creating_user(self):
+		response = self.client.post('/api/users', json.dumps({
+			"first_name": "abdu",
+			"last_name":"bashaa",
+			"username": "abdu1",
+			"email": "abdelrahman.farag114@gmail.com",
+			"phone": "01069225161"}), format="json", content_type="application/json") 
+
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+		# Test creating user
+	def test_verify_email(self):
+		response = self.client.post('/api/users', json.dumps({
+			"first_name": "abdu",
+			"last_name":"bashaa",
+			"username": "abdu1",
+			"email": "abdelrahman.farag114@gmail.com",
+			"phone": "01069225161"}), format="json", content_type="application/json") 
+
+		token = json.loads(response.content.decode('utf-8'))['token']
+
+		verify_response = self.client.post('/api/verify_token', json.dumps({
+			"token": token,
+				"password": "1234bB1$"}), format="json", content_type="application/json") 
+
+		self.assertEqual(verify_response.status_code, status.HTTP_200_OK) 
+
+
+
