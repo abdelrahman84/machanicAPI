@@ -29,3 +29,9 @@ class VerifyTokenSerializer(serializers.Serializer):
 			message='Please enter a strong password'
 		)
 	])
+
+class VerifyLoginSerializer(serializers.Serializer):
+
+	email = serializers.EmailField(required=True)
+	password = serializers.CharField(required=True)
+
