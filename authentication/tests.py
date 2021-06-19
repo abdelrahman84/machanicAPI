@@ -1,11 +1,9 @@
 import json
-from django.http import response
 from django.test import TestCase
 from rest_framework import status
 
 # application
 from .models import User
-from authentication.serializers import UserSerializer
 
 
 # Create your tests here.
@@ -21,17 +19,6 @@ class AuthenticationViewSetTestCase(TestCase):
 			email='abdelrahman.farag84@gmail.com',
 			phone='01069225161'
 		)
-
-	# Test users index
-	def test_all_users(self):
-		response = self.client.get('/api/users', format="json")
-
-		users = User.objects.all()
-		users_serializer = UserSerializer(users, many=True)
-
-		self.assertEqual(response.status_code, status.HTTP_200_OK)
-		self.assertEqual(response.content.decode('utf-8'),
-			json.dumps(users_serializer.data))
 
 	# Test creating user
 	def test_creating_user(self):
@@ -53,13 +40,13 @@ class AuthenticationViewSetTestCase(TestCase):
 			"email": "abdelrahman.farag114@gmail.com",
 			"phone": "01069225161"}), format="json", content_type="application/json") 
 
-		token = json.loads(response.content.decode('utf-8'))['token']
+		verify_token = json.loads(response.content.decode('utf-8'))['verify_token']
 
 		verify_response = self.client.post('/api/verify_token', json.dumps({
-			"token": token,
+			"verify_token": verify_token,
 				"password": "1234bB1$"}), format="json", content_type="application/json") 
 
-		self.assertEqual(verify_response.status_code, status.HTTP_200_OK) 
+		self.assertEqual(verify_response.status_code, status.HTTP_200_OK)	
 
 
 

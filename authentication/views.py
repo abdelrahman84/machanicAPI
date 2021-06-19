@@ -65,7 +65,10 @@ def verify_token(request):
 
 @api_view(['GET'])
 def getUsers(request):
-		users = User.objects.all()
+	  if request.user.is_staff:
+		  users = User.objects.all()
 
-		users_serializer = UserSerializer(users, many=True)
-		return JsonResponse(users_serializer.data, safe=False)
+		  users_serializer = UserSerializer(users, many=True)
+		  return JsonResponse(users_serializer.data, safe=False)
+
+	  return JsonResponse({'error': 'unauthorized'}, status=status.HTTP_401_UNAUTHORIZED) 
