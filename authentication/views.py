@@ -4,14 +4,15 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 from django.template.loader import get_template, render_to_string
 from django.core import mail
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 # 3rd part
 
 from authentication.models import User
-from authentication.serializers import UserSerializer, VerifyTokenSerializer
+from authentication.serializers import MyTokenObtainPairSerializer, UserSerializer, VerifyTokenSerializer
 
 
 @api_view(['POST', 'DELETE'])
@@ -62,6 +63,10 @@ def verify_token(request):
 		return JsonResponse(user_serializer.data, status=status.HTTP_200_OK)
 
 	return JsonResponse(token_serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+	serializer_class = MyTokenObtainPairSerializer
 
 @api_view(['GET'])
 def getUsers(request):
