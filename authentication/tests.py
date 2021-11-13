@@ -16,9 +16,7 @@ class AuthenticationViewSetTestCase(TestCase):
     def verify_email_helper(self):
 
         user = {
-            "first_name": "abdu",
-            "last_name": "bashaa",
-            "username": "abdu1",
+            "name": "abdu",
             "email": "abdelrahman.farag114@gmail.com",
             "phone": "01069225161"}
         response = self.client.post(
@@ -35,9 +33,7 @@ class AuthenticationViewSetTestCase(TestCase):
 
     def setUp(self):
         User.objects.create(
-            first_name='Abdelrahman',
-            last_name='Ahmed',
-            username='abdu',
+            name='Abdelrahman',
             email='abdelrahman.farag84@gmail.com',
             phone='01069225161'
         )
@@ -45,9 +41,7 @@ class AuthenticationViewSetTestCase(TestCase):
     # Test creating user
     def test_creating_user(self):
         response = self.client.post('/api/users', json.dumps({
-            "first_name": "abdu",
-            "last_name": "bashaa",
-            "username": "abdu1",
+            "name": "abdu",
             "email": "abdelrahman.farag114@gmail.com",
             "phone": "01069225161"}), format="json", content_type="application/json")
 
