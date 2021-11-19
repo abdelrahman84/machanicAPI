@@ -60,3 +60,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             return data
 
         raise serializers.ValidationError('Please verify your email first')
+
+class UpdateNameSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True)        

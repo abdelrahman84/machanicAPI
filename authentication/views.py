@@ -12,7 +12,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 # 3rd part
 
 from authentication.models import User
-from authentication.serializers import MyTokenObtainPairSerializer, UserSerializer, VerifyTokenSerializer
+from authentication.serializers import MyTokenObtainPairSerializer, UpdateNameSerializer, UserSerializer, VerifyTokenSerializer
 
 
 @api_view(['POST', 'DELETE'])
@@ -81,3 +81,20 @@ def getUsers(request):
         return JsonResponse(users_serializer.data, safe=False)
 
     return JsonResponse({'error': 'unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['PUT'])
+def updateUser(request, id):
+    user_name = JSONParser().parse(request)
+    user_name_serailizer = UpdateNameSerializer(data=user_name)
+
+    if user_name_serailizer.is_valid():
+        try:
+            user = User.objects.get(id=id)
+            user.name = user_name['name']
+            user.save()
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'user doesn`t exist'}, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'updated_name': user.name}, status=status.HTTP_200_OK)
+
+    return JsonResponse(user_name_serailizer.errors, status=status.HTTP_400_BAD_REQUEST)
