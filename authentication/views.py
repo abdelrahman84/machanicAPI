@@ -84,13 +84,13 @@ def getUsers(request):
 
 
 @api_view(['PUT'])
-def updateUser(request, id):
+def updateUser(request):
+    user =request.user
     user_name = JSONParser().parse(request)
     user_name_serailizer = UpdateNameSerializer(data=user_name)
 
     if user_name_serailizer.is_valid():
         try:
-            user = User.objects.get(id=id)
             user.name = user_name['name']
             user.save()
         except User.DoesNotExist:

@@ -99,9 +99,7 @@ class AuthenticationViewSetTestCase(TestCase):
 
         user_access_token = self.get_user_token_helper()
 
-        user = User.objects.get(email='abdelrahman.farag114@gmail.com')
-
-        url = '/api/updateUser/' + str(user.id)
+        url = '/api/updateUser'
 
         client = user_access_token['client']
 
