@@ -98,3 +98,11 @@ def updateUser(request):
         return JsonResponse({'updated_name': user.name}, status=status.HTTP_200_OK)
 
     return JsonResponse(user_name_serailizer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def getUserData(request):
+    user =request.user
+
+    userSerializer = UserSerializer(user)
+
+    return JsonResponse({'user': userSerializer.data}, status=status.HTTP_200_OK) 

@@ -14,5 +14,6 @@ urlpatterns = [
 	url(r'^api/all_users', views.getUsers),
 	url(r'^api/login', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 	url(r'^api/updateUser', views.updateUser),
+	url(r'^api/getUserData', views.getUserData),
 
 ]

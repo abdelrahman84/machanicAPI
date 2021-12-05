@@ -111,3 +111,25 @@ class AuthenticationViewSetTestCase(TestCase):
         # assert response
         self.assertEqual(update_name_response.status_code, status.HTTP_200_OK)
         self.assertEqual(jsonResponse['updated_name'], 'new name')
+
+    # Test get updated user info
+
+    def test_get_user_data(self):
+
+        user_access_token = self.get_user_token_helper()
+
+        url = '/api/getUserData'
+
+        client = user_access_token['client']
+
+        get_user_data = client.get(
+            url, content_type="application/json", safe=False)
+
+        jsonResponse = get_user_data.json()
+
+        user = jsonResponse['user']
+
+        # assert response
+        self.assertEqual(get_user_data.status_code, status.HTTP_200_OK)
+        # assert that retured user object has the required key
+        self.assertTrue(user['id'])
