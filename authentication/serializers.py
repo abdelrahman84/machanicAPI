@@ -61,5 +61,17 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         raise serializers.ValidationError('Please verify your email first')
 
+
 class UpdateNameSerializer(serializers.Serializer):
-    name = serializers.CharField(required=True)        
+    name = serializers.CharField(required=True)
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(max_length=128, required=True, validators=[
+        validators.RegexValidator(
+            regex='^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[@#$])[\w\d@#$]{8,}$',
+            message='Please enter a strong password'
+        )
+    ])

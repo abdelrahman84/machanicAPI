@@ -12,7 +12,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 # 3rd part
 
 from authentication.models import User
-from authentication.serializers import MyTokenObtainPairSerializer, UpdateNameSerializer, UserSerializer, VerifyTokenSerializer
+from authentication.serializers import ChangePasswordSerializer, MyTokenObtainPairSerializer, UpdateNameSerializer, UserSerializer, VerifyTokenSerializer
 
 
 @api_view(['POST', 'DELETE'])
@@ -85,7 +85,7 @@ def getUsers(request):
 
 @api_view(['PUT'])
 def updateUser(request):
-    user =request.user
+    user = request.user
     user_name = JSONParser().parse(request)
     user_name_serailizer = UpdateNameSerializer(data=user_name)
 
@@ -99,10 +99,28 @@ def updateUser(request):
 
     return JsonResponse(user_name_serailizer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 def getUserData(request):
-    user =request.user
+    user = request.user
 
     userSerializer = UserSerializer(user)
 
-    return JsonResponse({'user': userSerializer.data}, status=status.HTTP_200_OK) 
+    return JsonResponse({'user': userSerializer.data}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def changePassword(request):
+    user = request.user
+    user_data = JSONParser().parse(request)
+    change_password_serializer = ChangePasswordSerializer(data=user_data)
+
+    if change_password_serializer.is_valid():
+        if user.check_password(user_data['old_password']):
+            user.password = make_password(user_data['new_password'])
+            user.save()
+        else:
+            return JsonResponse({'error': 'password doesnt match'}, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'message': 'password updated successfully'}, status=status.HTTP_200_OK)
+
+    return JsonResponse(change_password_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

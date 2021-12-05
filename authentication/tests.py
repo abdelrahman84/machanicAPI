@@ -133,3 +133,38 @@ class AuthenticationViewSetTestCase(TestCase):
         self.assertEqual(get_user_data.status_code, status.HTTP_200_OK)
         # assert that retured user object has the required key
         self.assertTrue(user['id'])
+
+  # Test get updated user info
+
+    def test_change_password_with_wrong_old_password(self):
+
+        user_access_token = self.get_user_token_helper()
+
+        url = '/api/changePassword'
+
+        client = user_access_token['client']
+
+        get_user_data = client.post(
+            url, json.dumps({'old_password': '1111bB1$',
+                            'new_password': '4321bB1$'}),
+            content_type="application/json", safe=False)
+
+        # assert response
+        self.assertEqual(get_user_data.status_code,
+                         status.HTTP_400_BAD_REQUEST)
+
+    def test_change_password_with_correct_old_password(self):
+
+        user_access_token = self.get_user_token_helper()
+
+        url = '/api/changePassword'
+
+        client = user_access_token['client']
+
+        get_user_data = client.post(
+            url, json.dumps(
+                {'old_password': self.user_password, 'new_password': '4321bB1$'}),
+            content_type="application/json", safe=False)
+
+        # assert response
+        self.assertEqual(get_user_data.status_code, status.HTTP_200_OK)
