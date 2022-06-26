@@ -3,10 +3,6 @@ from django.contrib.auth.models import (BaseUserManager, PermissionsMixin)
 from django.db import models
 from django.core import validators
 
-# 3rd party
-
-import jwt
-
 
 class UserManager(BaseUserManager):
 

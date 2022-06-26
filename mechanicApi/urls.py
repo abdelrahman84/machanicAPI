@@ -19,5 +19,6 @@ from django.urls import path
 
 urlpatterns = [
     url(r'^', include('authentication.urls')),
+    url(r'^', include('cars.urls')),
     path('admin/', admin.site.urls),
 ]
